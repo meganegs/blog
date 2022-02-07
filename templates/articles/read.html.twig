@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Afficher l'article{% endblock %}
+
+{% block body %}
+
+
+    {% block headerConnexion %}
+      {% include "./global/headerConnexion.html.twig" %}
+    {% endblock %}
+
+    
+    <main role="main">
+      <!--  -->
+      
+      <div id="BoxReadText" class="container">
+      <a id="return" class="btn btn-primary" href="{{ path('articles_index')}}">
+      Retour
+      </a>
+        <img class="topPhotoRead" src="{{articles.image }}" alt="topPhoto"/>
+
+
+
+        <!-- row of columns -->
+        <div class="row">
+          <h2 class="SubtitleArt">
+              {{articles.title }}
+          </h2>
+          <div class="col-md-6">
+          
+            <p class="readTextArt">
+              {{articles.content}}
+            </p>
+              
+            <p>
+              <span class="text-muted">{{articles.createdAt | ago }} - {{ articles.user.lastName}} {{ articles.user.firstName}}</span>
+             
+            </p>
+
+          </div>
+         
+          
+
+        </div>
+
+      
+      <a class="btn btn-secondary" href="" role="button">
+        Modifier
+      </a>
+      <a class="btn btn-danger" href="{{path('articles_new', {"id": articles.id})}}" role="button">
+        ajouter
+      </a>
+      <a class="btn btn-danger" href="{{path('articles_delete', {"id": articles.id})}}" onclick="return confirm('Attention cette action va supprimer l\'article selectionne')">
+        supprimer
+      </a>
+
+      </div> <!-- /container -->
+      
+    </main>
+
+    {% block footer %}
+      {% include "./global/footer.html.twig" %}
+    {% endblock %}
+
+    
+{% endblock %}

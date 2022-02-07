@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home page{% endblock %}
+
+
+{% block body %}
+
+  {% block header %}
+    {% include "./global/header.html.twig" %}
+   
+  {% endblock %}
+
+    <main role="main">
+
+    
+
+    
+    <div class="container">
+      <!--  -->
+      <img class="topPhoto" src="/images/photoTop.png" alt="topPhoto"/>
+        <div class="row">
+          <h2 class="SubtitleArt">
+            Nos articles
+          </h2>
+       
+       {% for articles in lastArticles %}
+        <!-- row of columns -->
+        
+
+          <div class="col-md-4">
+              <img class="topPhoto" src="{{articles.image }}" alt="topPhoto"/>
+            
+            <p class="prgArt">
+              {{articles.title |u.truncate(50, '...')}}
+            </p>
+              
+            <p>
+              <span class="text-muted">{{articles.createdAt | ago }} - {{ articles.user.lastName}} {{ articles.user.firstName}}</span>
+             
+              <a class="btn btn-secondary" href="{{ path('articles_read', {"id": articles.id})}}" role="button">
+                Voir
+              </a>
+            </p>
+
+          </div>
+    {% endfor %}
+          
+
+        </div>
+
+      
+
+      </div> <!-- /container -->
+
+    </main>
+
+  {% block footer %}
+    {% include "./global/footer.html.twig" %}
+  {% endblock %}
+{% endblock %}

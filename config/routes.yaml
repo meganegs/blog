@@ -1,0 +1,17 @@
+controllers:
+  resource: ../src/Controller/
+  type: annotation
+
+kernel:
+  resource: ../src/Kernel.php
+  type: annotation
+#articles:
+#  path: /articles/
+# controller: App\Controller\ArticlesController::articles
+#  defaults:
+#    slug: 0
+#  requirements:
+#    slug: \d+
+#  methods: [GET, POST]
+#  host: localhost
+#  schemes: [https, http]

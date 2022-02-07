@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editer un articles{% endblock %}
+
+
+{% block body %}
+    <h1>Editer un articles</h1>
+    {{ include('articles/_form.html.twig')}}
+
+    {{ form_start(form)}}
+  
+    {{ form_end(form)}}
+      <a class="btn btn-danger" href="{{path('articles_index', {"id": articles.id})}}">
+        Editer
+    </a>
+{% endblock %}

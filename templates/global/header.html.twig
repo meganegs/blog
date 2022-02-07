@@ -1,0 +1,11 @@
+{% block header %}
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-with">
+    <img src="/images/Iconlogo.png" class="lg_Nav" alt="lg" />
+    <img class="SpaceBlog" src="/images/SpaceBlog.png" alt="spBlg"/>
+     {% block connect %}
+      {% include "./security/buttonConnexion.html.twig" %}
+    {% endblock %}
+</nav>
+
+{% endblock %}
