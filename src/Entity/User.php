@@ -129,25 +129,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getArticles(): Collection
     {
-        return $this->articles;
+        return $this->article;
     }
 
-    public function addArticle(Articles $article): self
+    public function addArticles(Articles $articles): self
     {
-        if (!$this->articles->contains($article)) {
-            $this->articles[] = $article;
-            $article->setUser($this);
+        if (!$this->articles->contains($articles)) {
+            $this->articles[] = $articles;
+            $articles->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeArticle(Articles $article): self
+    public function removeArticles(Articles $articles): self
     {
-        if ($this->articles->removeElement($article)) {
+        if ($this->articles->removeElement($articles)) {
             // set the owning side to null (unless already changed)
-            if ($article->getUser() === $this) {
-                $article->setUser(null);
+            if ($articles->getUser() === $this) {
+                $articles->setUser(null);
             }
         }
 

@@ -23,7 +23,7 @@
             Nos articles
           </h2>
        
-       {% for articles in lastArticles %}
+       {% for articles in articles %}
         <!-- row of columns -->
         
 
@@ -37,7 +37,7 @@
             <p>
               <span class="text-muted">{{articles.createdAt | ago }} - {{ articles.user.lastName}} {{ articles.user.firstName}}</span>
              
-              <a class="btn btn-secondary" href="{{ path('articles_read', {"id": articles.id})}}" role="button">
+              <a class="btn btn-secondary" href="{{ path('article_show', {"id": articles.id})}}" role="button">
                 Voir
               </a>
             </p>

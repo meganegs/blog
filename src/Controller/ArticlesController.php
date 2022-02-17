@@ -3,135 +3,94 @@
 namespace App\Controller;
 
 use App\Entity\Articles;
-use App\Form\ArticleType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\Article1Type;
 use App\Repository\ArticlesRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-//use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+
 
 class ArticlesController extends AbstractController
 {
-    private $manager;
-
-    public function __construct(EntityManagerInterface $manager) {
-        $this->manager = $manager;
-
-    }
-  
-
     /**
-     * @Route("/", name="articles_index")
+     * @Route("/{id}", name="article_index")
      */
-   
-
-    public function index(ArticlesRepository $articlesRepository)
+    public function index(ArticlesRepository $articlesRepository): Response
     {
-
-        $lastArticles = $articlesRepository->findLastArticles(5);
-        //dd($lastArticles);
         return $this->render('articles/index.html.twig', [
-            'lastArticles' => $lastArticles,
+            'articles' => $articlesRepository->findLastArticles(),
         ]);
     }
-
+    
     /**
-     * Affichage de l'article
-     * @Route("articles/{id}", name="articles_read")
-     * @param Articles $articles
+     * @Route("/new/{id}", name="article_new")
+     * @param Request $request
      * @return Response
      */
-    public function read(Articles $articles):Response
-    {
-        return $this->render('articles/read.html.twig', [
-            "articles" => $articles
-        ]);
-    }
-
-    /**
-     * Editer un article
-     * @Route("articles/{id}/new", name="articles_new")
-     * @return Request $request
-     * @return Response
-     */
-    public function new(Request $request): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $articles = new Articles();
-        $form = $this->createForm(ArticleType::class, $articles);
+        $form = $this->createForm(Article1Type::class, $articles);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid())
-        {
-            //Methode deprecie to symfony 6
-            /*$manager = $this->getDoctrine()->getManager();
 
-            $manager->persist($articles);
-            $manager->flush();*/
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($articles);
+            $entityManager->flush();
 
-            return $this->redirectToRoute('articles_index');
+            return $this->redirectToRoute('article_index', [], Response::HTTP_SEE_OTHER);
         }
-        return $this->render('articles/news.html.twig', [
-            "form" => $form->createView()
+
+        return $this->renderForm('articles/new.html.twig', [
+            'articles' => $articles,
+            'form' => $form,
         ]);
     }
 
     /**
-     * Editer un article
-     * @Route("articles/{id}/edit", name="articles_edit")
-     * @return Articles $articles
-     * @return Request $request
-     * @return Response
+     * @Route("/show/{id}", name="article_show")
      */
-    public function edit(ManagerRegistry $doctrine, Request $request): Response
+    
+    public function show(Articles $articles): Response
     {
-
-        $em = $doctrine->getManager();
-
-        $articles = new Articles();
-        $form = $this->createForm(ArticleType::class, $articles);
-        
+        return $this->render('articles/show.html.twig', [
+            'articles' => $articles,
+        ]);
+    }
+    
+    /**
+     * @Route("/{id}/edit", name="article_edit")
+     */
+    public function edit(Request $request, Articles $articles, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(Article1Type::class, $articles);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid())
-        {
-            $em->persist($articles);
-            $em->flush();
 
-           // return $this->redirectToRoute('articles_index');
-        }       
-        
-        return $this->render('articles/edit.html.twig', [
-            "form" => $form->createView()
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('article_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('articles/edit.html.twig', [
+            'articles' => $articles,
+            'form' => $form,
         ]);
     }
 
     
     /**
-     * Delete
-     * @Route("/articles/{id}/delete", name="articles_delete")
-     * @return  Articles $articles
-     * @return RedirectResponse
-     *
-     */
-    public function delete(ManagerRegistry $doctrine): RedirectResponse
+      * @Route("/{id}", name="article_delete")
+      */
+    public function delete(Request $request, Articles $articles, EntityManagerInterface $entityManager): Response
     {
-        
-        $em = $doctrine()->getManager();
-        
-        $articles = new Articles();
-        //$articles = $articles->find($id);
-        /*if(!$articles){
-            throw $this->createNotFoundException('...'. $id
-        );
-        }*/
+         if ($this->isCsrfTokenValid('delete'.$articles->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($articles);
+            $entityManager->flush();
+        }
 
-        $em->remove($articles);
-        $em->flush();
-
-        return $this->redirectToRoute('articles_index');
+        return $this->redirectToRoute('article_index', [], Response::HTTP_SEE_OTHER);
     }
-
-
 }

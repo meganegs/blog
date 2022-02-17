@@ -14,12 +14,10 @@
       <!--  -->
       
       <div id="BoxReadText" class="container">
-      <a id="return" class="btn btn-primary" href="{{ path('articles_index')}}">
+      <a id="return" class="btn btn-primary" href="{{ path('article_index', {"id": articles.id})}}">
       Retour
       </a>
         <img class="topPhotoRead" src="{{articles.image }}" alt="topPhoto"/>
-
-
 
         <!-- row of columns -->
         <div class="row">
@@ -38,24 +36,17 @@
             </p>
 
           </div>
-         
-          
-
         </div>
-
-      
       <a class="btn btn-secondary" href="" role="button">
         Modifier
       </a>
-      <a class="btn btn-danger" href="{{path('articles_new', {"id": articles.id})}}" role="button">
+      <a class="btn btn-danger" href="{{path('article_new', {"id": articles.id})}}" role="button">
         ajouter
       </a>
-      <a class="btn btn-danger" href="{{path('articles_delete', {"id": articles.id})}}" onclick="return confirm('Attention cette action va supprimer l\'article selectionne')">
+      <a class="btn btn-danger" href="{{path('article_delete', {"id": articles.id})}}" onclick="return confirm('Attention cette action va supprimer l\'article selectionne')">
         supprimer
       </a>
-
       </div> <!-- /container -->
-      
     </main>
 
     {% block footer %}
